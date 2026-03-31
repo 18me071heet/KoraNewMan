@@ -1730,63 +1730,6 @@
       "response": []
     },
     {
-      "name": "Read specific notification",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Specific notification read\",()=>{\r",
-              "\r",
-              "    pm.response.to.have.status(200);\r",
-              "\r",
-              "    var jsonData = pm.response.json();\r",
-              "     \r",
-              "    pm.expect(jsonData.success).to.be.true; \r",
-              "    pm.expect(jsonData.message).to.eql(\"Notification marked as read.\"); \r",
-              "    \r",
-              "})"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"notification_id\": {{notifications}}\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/notifications/mark-read/",
-          "protocol": "https",
-          "host": [
-            "api-koradream",
-            "dev",
-            "inheritxdev",
-            "in"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "user",
-            "notifications",
-            "mark-read",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Clear all notifications",
       "event": [
         {
