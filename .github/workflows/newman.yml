@@ -17,7 +17,7 @@ jobs:
         run: npm install -g newman newman-reporter-htmlextra
 
       - name: Run API Tests with Newman
-        run: newman run korausercollection.json -r cli,htmlextra --reporter-htmlextra-export newman-report.html --reporter-htmlextra-title "Kora API Test Report"
+        run: newman run korausercollection.json -r cli,htmlextra --reporter-htmlextra-export newman-report.html --reporter-htmlextra-title "Kora API Test Report" --working-dir ./
         
       - name: Upload Test Report Artifact
         uses: actions/upload-artifact@v4

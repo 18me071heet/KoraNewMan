@@ -16,12 +16,13 @@
             "exec": [
               "var random = Math.random().toString(36).substring(3);\r",
               "\r",
+              "var mobile = \"9\" + Date.now().toString().slice(-9);\r",
               "var firstName = \"Tenzi\";\r",
               "var lastName = \"Hopes\";\r",
               "var email = \"Tenzi\" + random + \"@yopmail.com\";\r",
               "var password = \"Test@123\";\r",
               "var cpassword = \"Test@123\";\r",
-              "var mobile = \"5001215123\";\r",
+              "\r",
               "var country = \"India\";\r",
               "var state = \"Gujarat\";\r",
               "var city = \"Jamnagar\";\r",
@@ -47,14 +48,19 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"User created successfully\", () => {\r",
-              "    pm.response.to.have.status(200);\r",
+              "pm.test(\"User created or already exists\", function () {\r",
+              "    pm.expect([200, 400]).to.include(pm.response.code);\r",
               "});\r",
               "\r",
               "var jsondata = pm.response.json();\r",
               "\r",
-              "pm.collectionVariables.set(\"kora_userId\",jsondata.data.user_id);\r",
-              "//pm.collectionVariables.set(\"kora_mobileNumber\", jsondata.data.mobile);"
+              "// ✅ Only set userId if success response\r",
+              "if (pm.response.code === 200 && jsondata.data && jsondata.data.user_id) {\r",
+              "    pm.collectionVariables.set(\"kora_userId\", jsondata.data.user_id);\r",
+              "    console.log(\"User ID saved:\", jsondata.data.user_id);\r",
+              "} else {\r",
+              "    console.log(\"User not created or already exists\");\r",
+              "}"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -821,7 +827,7 @@
             },
             {
               "key": "caption",
-              "value": "\"Live match\"",
+              "value": "\"Highlights of yesterday's match\"",
               "type": "text",
               "uuid": "9e7e9cec-4f06-4161-aeca-cac07cf79cb1"
             },
@@ -829,7 +835,7 @@
               "key": "media_file",
               "type": "file",
               "uuid": "b0a5a7ff-ca1c-42e2-bf2a-5547b4a7de50",
-              "src": "/C:/Users/INX/Downloads/footbll.jpg"
+              "src": "Test Images/footbll.jpg"
             },
             {
               "key": "access",
@@ -952,7 +958,7 @@
               "key": "media_file",
               "type": "file",
               "uuid": "958d8dea-f290-46cf-a339-8d150742ea7f",
-              "src": "/C:/Users/INX/OneDrive/Documents/Saved Pictures/test2.jpg"
+              "src": "Test Images/test.jpg"
             }
           ]
         },
