@@ -1,0 +1,2727 @@
+{
+  "info": {
+    "_postman_id": "f2ae5362-2d35-43ba-9175-15c2bc727bff",
+    "name": "Kora Dream User New",
+    "description": "User's API :\n\nRoles : Parent, Player and Scout",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36948915"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var random = Math.random().toString(36).substring(3);\r",
+              "\r",
+              "var firstName = \"Tenzi\";\r",
+              "var lastName = \"Hopes\";\r",
+              "var email = \"Tenzi\" + random + \"@yopmail.com\";\r",
+              "var password = \"Test@123\";\r",
+              "var cpassword = \"Test@123\";\r",
+              "var mobile = \"5001215123\";\r",
+              "var country = \"India\";\r",
+              "var state = \"Gujarat\";\r",
+              "var city = \"Jamnagar\";\r",
+              "var other_languages =\"Spanish\";\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_fname\", firstName);\r",
+              "pm.collectionVariables.set(\"kora_lname\", lastName);\r",
+              "pm.collectionVariables.set(\"kora_email\", email);\r",
+              "pm.collectionVariables.set(\"kora_password\", password);\r",
+              "pm.collectionVariables.set(\"kora_cpassword\", cpassword);\r",
+              "pm.collectionVariables.set(\"kora_mobile\", mobile);\r",
+              "pm.collectionVariables.set(\"kora_country\", country);\r",
+              "pm.collectionVariables.set(\"kora_state\", state);\r",
+              "pm.collectionVariables.set(\"kora_city\", city);\r",
+              "pm.collectionVariables.set(\"kora_other_languages\", other_languages);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "var jsondata = pm.response.json();\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_userId\",jsondata.data.user_id);\r",
+              "//pm.collectionVariables.set(\"kora_mobileNumber\", jsondata.data.mobile);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"first_name\": \"{{kora_fname}}\",\r\n  \"last_name\": \"{{kora_lname}}\",\r\n  \"email\": \"{{kora_email}}\",\r\n  \"mobile\": \"{{kora_mobile}}\",\r\n  \"password\": \"{{kora_password}}\",\r\n  \"confirm_password\": \"{{kora_cpassword}}\",\r\n  \"country\": \"{{kora_country}}\",\r\n  \"state\": \"{{kora_state}}\",\r\n  \"city\": \"{{kora_city}}\",\r\n  \"terms_agreed\": true,\r\n  \"roletype\": \"PARENT\",\r\n  \"age_groups_covered\": [\r\n    \"Under-8 (U8)\"\r\n  ],\r\n  \"languages_spoken\": [\r\n    \"English\"\r\n  ],\r\n  \"other_language\": \"{{kora_other_languages}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/signup/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "signup",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Log In by Email",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "let res;\r",
+              "\r",
+              "try {\r",
+              "    res = pm.response.json();\r",
+              "} catch (e) {\r",
+              "    console.log(\"Invalid JSON response\");\r",
+              "}\r",
+              "\r",
+              "// Save token\r",
+              "if (pm.response.code === 200 && res?.data?.access) {\r",
+              "    pm.collectionVariables.set(\"token\", res.data.access);\r",
+              "    console.log(\"Token saved:\", res.data.access);\r",
+              "} else {\r",
+              "    console.log(\"Login failed\");\r",
+              "    postman.setNextRequest(null);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var loginParentEmail = \"wisely.rom@yopmail.com\";\r",
+              "var loginParentPassword = \"Test@123\";\r",
+              "\r",
+              "var loginScoutEmail = \"gorge@yopmail.com\"\r",
+              "var loginScoutPassword = \"Test@123\"\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_login_email\",loginParentEmail);\r",
+              "pm.collectionVariables.set(\"kora_login_password\", loginParentPassword);\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_login_scout_email\", loginScoutEmail);\r",
+              "pm.collectionVariables.set(\"kora_login_scout_password\", loginScoutPassword);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"identifier\": \"{{kora_login_email}}\",\r\n  \"password\": \"{{kora_login_password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/email-login/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "email-login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Forgot Password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Password reset sent successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email_or_mobile\": \"wisely.rom@yopmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/forget-password/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "forget-password",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send OTP",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email_or_phone\": \"heet.n@inheritx.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/send-otp/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "send-otp",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify OTP",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var email = \"wisely.rom@yopmail.com\";\r",
+              "var otp = \"457576\"\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_email_otp\",email);\r",
+              "pm.collectionVariables.set(\"kora_otp\", otp);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email_or_phone\": \"{{kora_email_otp}}\",\r\n  \"otp\": \"{{kora_otp}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/verify-otp/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "verify-otp",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2FA Verify OTP",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var email = \"rubin.byers@yopmail.com\";\r",
+              "var otp = \"457576\"\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_2FA_otp_email\",email);\r",
+              "pm.collectionVariables.set(\"kora_2FA_otp\", otp);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_email_verification\",jsonData.data.access);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email_or_phone\": \"{{kora_2FA_otp_email}}\",\r\n  \"otp\": \"{{kora_2FA_otp}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/2fa-verify-otp/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "2fa-verify-otp",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contact Us",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Contact us message sent\",()=>{\r",
+              "\r",
+              "    var responseJson = pm.response.json();\r",
+              "    pm.expect(pm.response.json().success).to.eql(true);\r",
+              "    pm.expect(pm.response.json().message).to.eql(\"Your message has been sent successfully.\");\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"notes\": \"Notes has been generated from API\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/contact-us/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "contact-us",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Parent Profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY4MzY3Njc2LCJpYXQiOjE3NjgyODEyNzYsImp0aSI6IjVhYWIwNTViYjc0NDQyMWViYmU1MWYzMDI2MjBiNDA3IiwidXNlcl9pZCI6IjcxNCIsInJvbGUiOiJQQVJFTlQifQ.6qxQiIp5k6MDT2FeDoK2-XAqEhTlKQfRUyxwkPHgYB0",
+            "type": "text"
+          },
+          {
+            "key": "Role",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/parents/profile/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "parents",
+            "profile",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Player Details by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/players/323/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "players",
+            "323",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Parent Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Parent Details is updated successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(pm.response.json().success).to.be.true;\r",
+              "    pm.expect(pm.response.json().message).to.equal(\"Profile updated.\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "first_name",
+              "value": "Kenzi",
+              "type": "text",
+              "uuid": "ed25c7b0-1b86-460d-b2a8-7947acde7a08"
+            },
+            {
+              "key": "last_name",
+              "value": "Shane",
+              "type": "text",
+              "uuid": "c96718de-8fe8-4cd3-bb2d-8a8b0bed363c"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/parents/profile/update/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "parents",
+            "profile",
+            "update",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Player Log In",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Player is logged in successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "let res = pm.response.json();\r",
+              "\r",
+              "// Save user_id\r",
+              "if (res?.data?.user?.user_id) {\r",
+              "    pm.collectionVariables.set(\"player_user_id\", res.data.user.user_id);\r",
+              "    console.log(\"User ID saved:\", res.data.user.user_id);\r",
+              "} else {\r",
+              "    console.log(\"User ID not found in response\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"JuliaM\",\r\n  \"password\": \"Test@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/player/login/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "player",
+            "login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verification Status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Verification request is fetched successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/verification-status/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "verification-status",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get CRM Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Media has been added successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/crm/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "crm",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create New Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Post has been created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "pm.collectionVariables.set(\"postId\", jsonData.data.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "player_id",
+              "value": "317",
+              "type": "text",
+              "uuid": "737d3e95-fba8-4ee0-a3dc-f6101f69f472"
+            },
+            {
+              "key": "caption",
+              "value": "\"Live match\"",
+              "type": "text",
+              "uuid": "9e7e9cec-4f06-4161-aeca-cac07cf79cb1"
+            },
+            {
+              "key": "media_file",
+              "type": "file",
+              "uuid": "b0a5a7ff-ca1c-42e2-bf2a-5547b4a7de50",
+              "src": "/C:/Users/INX/Downloads/footbll.jpg"
+            },
+            {
+              "key": "access",
+              "value": "public",
+              "type": "text",
+              "uuid": "6513de81-55fa-4525-9967-eeee41f85268"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/social-feeds/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "social-feeds",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "My Players",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"All the My Player Details are fetched successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/parents/players/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "parents",
+            "players",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Post Updated successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "media_file",
+              "type": "file",
+              "uuid": "958d8dea-f290-46cf-a339-8d150742ea7f",
+              "src": "/C:/Users/INX/OneDrive/Documents/Saved Pictures/test2.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/{{postId}}/edit/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "{{postId}}",
+            "edit",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Post Removed successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/{{postId}}/delete/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "{{postId}}",
+            "delete",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Post Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"All the post details are fetched successfully\",()=>{\r",
+              "\r",
+              "pm.response.to.have.status(200);\r",
+              "\r",
+              "});\r",
+              "\r",
+              "var jsonData = pm.response.json();\r",
+              "pm.collectionVariables.set(\"specific_post_id\", jsonData.data.posts[0].id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/parents/myposts/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "parents",
+            "myposts",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Specific Post Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/{{specific_post_id}}/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "{{specific_post_id}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Unique User Name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Unique User name is generated successfully\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/players/generate-username/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "players",
+            "generate-username",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search player in social Feed Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetch Social feed list\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "})\r",
+              "\r",
+              "var jsonData = pm.response.json();\r",
+              "pm.collectionVariables.set(\"social_feed_id\",jsonData.data.posts[1].id);\r",
+              "pm.collectionVariables.set(\"user_id_\",jsonData.data.posts[3].user_id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/social/feeds-list/?search=Steve&sort=newest",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "social",
+            "feeds-list",
+            ""
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "Steve"
+            },
+            {
+              "key": "sort",
+              "value": "newest"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Resend code",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var resend_email = \"wisely.rom@yopmail.com\"\r",
+              "pm.collectionVariables.set(\"kora_resend_otp\",resend_email);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Resend code is sent successfully\",()=>{\r",
+              "pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email_or_phone\": \"{{kora_resend_otp}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/resend-code/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "resend-code",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Comment in Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Comment has been added successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "var jsonData = pm.response.json();\r",
+              "pm.collectionVariables.set(\"edit_comment_id\", jsonData.data.comment_id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"text\":\"Great One\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/{{social_feed_id}}/comments/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "{{social_feed_id}}",
+            "comments",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Comment on specific post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Comment has been edited successfully\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(pm.response.json().success).to.eql(true);\r",
+              "    pm.expect(pm.response.json().message).to.eql(\"Comment updated successfully\");\r",
+              "    \r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"text\": \"Nice post buddy , Keep it up\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/edit-comment/{{edit_comment_id}}/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "edit-comment",
+            "{{edit_comment_id}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Comment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Comment has been deleted successfully\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/delete-comment/{{edit_comment_id}}/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "delete-comment",
+            "{{edit_comment_id}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of likes on the post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Like list of users have been fetched successfully\",()=>{\r",
+              "pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/{{social_feed_id}}/likes/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "{{social_feed_id}}",
+            "likes",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Like / Unlike on specific post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Like / Unlike for post has been done successfully\",()=>{\r",
+              " pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/posts/383/like-unlike/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "posts",
+            "383",
+            "like-unlike",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Follow / Un Follow user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User is follow / Unfollow successfully\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"following_id\": \"{{user_id_}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/user-follow-unfollow/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "user-follow-unfollow",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2FA settings update",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"2FA settings has been updated successfull\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "PARENT",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"two_fa_enabled\": false,\r\n  \"biometric_enabled\": true,\r\n  \"notifications_enabled\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/2fa-settings/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "2fa-settings",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of Followers and Following",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"List of followers and following\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "    \r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.include(\"Followers and following lists fetched successfully\");\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/{{user_id_}}/followers-following/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "{{user_id_}}",
+            "followers-following",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get notifications",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetch notifications\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    var jsonData =pm.response.json();\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.equal(\"Notifications fetched successfully.\");\r",
+              "\r",
+              "    pm.collectionVariables.set(\"notifications\", jsonData.data.notifications[0].id);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/notifications/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "notifications",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Read specific notification",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Specific notification read\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    var jsonData = pm.response.json();\r",
+              "     \r",
+              "    pm.expect(jsonData.success).to.be.true; \r",
+              "    pm.expect(jsonData.message).to.eql(\"Notification marked as read.\"); \r",
+              "    \r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"notification_id\": {{notifications}}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/notifications/mark-read/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "notifications",
+            "mark-read",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Clear all notifications",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Clear all notifications\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.message).to.include(\"notifications cleared.\");\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/notifications/clear-all/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "notifications",
+            "clear-all",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search player",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/players/search/?positions=Centre Back&foot=RIGHT",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "players",
+            "search",
+            ""
+          ],
+          "query": [
+            {
+              "key": "positions",
+              "value": "Centre Back"
+            },
+            {
+              "key": "foot",
+              "value": "RIGHT"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of all scouts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Scout Details\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.equal(\"Scout directory fetched successfully.\");\r",
+              "\r",
+              "    pm.collectionVariables.set(\"scout_id\", jsonData.data.scouts[0].id);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/scouts/directory/?search=Senzu",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "scouts",
+            "directory",
+            ""
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "Senzu"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get specific scout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Specific scout details fetched\",()=>{\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    var jsonData = pm.response.json();\r",
+              "\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.equal(\"Scout details fetched successfully.\");\r",
+              "})\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/scouts/directory/{{scout_id}}/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "scouts",
+            "directory",
+            "{{scout_id}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Log Out",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"device_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2ODU2MTM0MCwiaWF0IjoxNzY3OTU2NTQwLCJqdGkiOiJhZmJjYTUxZmY2YmY0YmFmOTdjM2E3OTc3OGM2ZjUyMCIsInVzZXJfaWQiOiI1MjMifQ.npe72xxlbY-KLM3leAFR4psnKAlPUnnpXhgEWJL3XcI\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/logout/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "logout",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginByScout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "let res;\r",
+              "\r",
+              "try {\r",
+              "    res = pm.response.json();\r",
+              "} catch (e) {\r",
+              "    console.log(\"Invalid JSON response\");\r",
+              "}\r",
+              "\r",
+              "// Save token\r",
+              "if (pm.response.code === 200 && res?.data?.access) {\r",
+              "    pm.collectionVariables.set(\"token\", res.data.access);\r",
+              "    console.log(\"Token saved:\", res.data.access);\r",
+              "} else {\r",
+              "    console.log(\"Login failed\");\r",
+              "    postman.setNextRequest(null);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var loginParentEmail = \"wisely.rom@yopmail.com\";\r",
+              "var loginParentPassword = \"Test@123\";\r",
+              "\r",
+              "var loginScoutEmail = \"gorge@yopmail.com\"\r",
+              "var loginScoutPassword = \"Test@123\"\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_login_email\",loginParentEmail);\r",
+              "pm.collectionVariables.set(\"kora_login_password\", loginParentPassword);\r",
+              "\r",
+              "pm.collectionVariables.set(\"kora_login_scout_email\", loginScoutEmail);\r",
+              "pm.collectionVariables.set(\"kora_login_scout_password\", loginScoutPassword);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"identifier\": \"{{kora_login_scout_email}}\",\r\n  \"password\": \"{{kora_login_scout_password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/email-login/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "email-login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get scout user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Scout profile fetched\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.equal(\"Scout profile fetched.\");\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/scouts/profile/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "scouts",
+            "profile",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update scout profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Scout profile updated successfully\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.success).to.be.true;\r",
+              "    pm.expect(jsonData.message).to.equal(\"Scout profile updated.\");\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "first_name",
+              "value": "Senzuu",
+              "type": "text",
+              "uuid": "7459abff-09c2-4bfe-bee5-30f15ee15797"
+            },
+            {
+              "key": "tagline",
+              "value": "Football Coach",
+              "type": "text",
+              "uuid": "9d13e8ec-3418-4b3f-821d-9e70d5a64fb2"
+            },
+            {
+              "key": "description",
+              "value": "An experienced football Coach with over 10 years of experience",
+              "type": "text",
+              "uuid": "00b8e50d-943a-4543-b7eb-dc375e58e016"
+            },
+            {
+              "key": "year_established",
+              "value": "2000",
+              "type": "text",
+              "uuid": "a322f0bd-24e6-4cf9-8fd6-09d7100e2bd0"
+            },
+            {
+              "key": "affiliation",
+              "value": "Always ready for new competition",
+              "type": "text",
+              "uuid": "ea9f6df2-aeff-4280-87b0-4d19a341e932"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/scouts/profile/update/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "scouts",
+            "profile",
+            "update",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get the List of Chats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/chats/?sort=newest",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "chats",
+            ""
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "newest"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Auto Book Mark",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Auto Book Mark Updation\",()=>{\r",
+              "    pm.expect(pm.response.json().success).to.eql(true)\r",
+              "    pm.expect(pm.response.json().message).to.eql(\"Auto bookmark toggled successfully.\")\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "SCOUT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/scouts/auto-bookmark/toggle/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "scouts",
+            "auto-bookmark",
+            "toggle",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of All Private Notes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "ROLE",
+            "value": "SCOUT",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/private-notes/list/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "private-notes",
+            "list",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contact Us",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Contact Us Queries\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200)\r",
+              "    pm.expect(pm.response.json().message).to.eql(\"Your message has been sent successfully.\")\r",
+              "    pm.expect(pm.response.json().success).to.eql(true)\r",
+              "\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"notes\": \"Enquiry has been sent from API's \"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/contact-us/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "contact-us",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Profile Fields",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetched Player\",()=>{\r",
+              "\r",
+              "    pm.response.to.have.status(200)\r",
+              "    pm.expect(pm.response.json().success).to.eql(true)\r",
+              "    pm.expect(pm.response.json().message).to.eql(\"Active player profile fields retrieved successfully.\")\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/player/profile-fields/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "player",
+            "profile-fields",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Log out Scout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User created successfully\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"device_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2ODU2MTM0MCwiaWF0IjoxNzY3OTU2NTQwLCJqdGkiOiJhZmJjYTUxZmY2YmY0YmFmOTdjM2E3OTc3OGM2ZjUyMCIsInVzZXJfaWQiOiI1MjMifQ.npe72xxlbY-KLM3leAFR4psnKAlPUnnpXhgEWJL3XcI\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-koradream.dev.inheritxdev.in/api/v1/user/logout/",
+          "protocol": "https",
+          "host": [
+            "api-koradream",
+            "dev",
+            "inheritxdev",
+            "in"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "logout",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "kora_fname",
+      "value": ""
+    },
+    {
+      "key": "kora_lname",
+      "value": ""
+    },
+    {
+      "key": "kora_email",
+      "value": ""
+    },
+    {
+      "key": "kora_password",
+      "value": ""
+    },
+    {
+      "key": "kora_cpassword",
+      "value": ""
+    },
+    {
+      "key": "kora_mobile",
+      "value": ""
+    },
+    {
+      "key": "kora_country",
+      "value": ""
+    },
+    {
+      "key": "kora_state",
+      "value": ""
+    },
+    {
+      "key": "kora_city",
+      "value": ""
+    },
+    {
+      "key": "kora_other_languages",
+      "value": ""
+    },
+    {
+      "key": "kora_userId",
+      "value": ""
+    },
+    {
+      "key": "kora_pname",
+      "value": ""
+    },
+    {
+      "key": "kora_plname",
+      "value": ""
+    },
+    {
+      "key": "kora_userName",
+      "value": ""
+    },
+    {
+      "key": "kora_gender",
+      "value": ""
+    },
+    {
+      "key": "kora_dob",
+      "value": ""
+    },
+    {
+      "key": "kora_positions",
+      "value": ""
+    },
+    {
+      "key": "kora_email_password",
+      "value": ""
+    },
+    {
+      "key": "kora_email_otp",
+      "value": ""
+    },
+    {
+      "key": "kora_otp",
+      "value": ""
+    },
+    {
+      "key": "kora_mobileNumber",
+      "value": ""
+    },
+    {
+      "key": "kora_2FA_otp_email",
+      "value": ""
+    },
+    {
+      "key": "kora_2FA_otp",
+      "value": ""
+    },
+    {
+      "key": "kora_email_verification",
+      "value": ""
+    },
+    {
+      "key": "kora_player_id",
+      "value": ""
+    },
+    {
+      "key": "postId",
+      "value": ""
+    },
+    {
+      "key": "player_id_specific",
+      "value": ""
+    },
+    {
+      "key": "kora_post_id",
+      "value": ""
+    },
+    {
+      "key": "kora_media_id",
+      "value": ""
+    },
+    {
+      "key": "kora_resend_otp",
+      "value": ""
+    },
+    {
+      "key": "specific_post_id",
+      "value": ""
+    },
+    {
+      "key": "comment_for_post",
+      "value": ""
+    },
+    {
+      "key": "social_feed_id",
+      "value": ""
+    },
+    {
+      "key": "user_id_",
+      "value": ""
+    },
+    {
+      "key": "parent_id",
+      "value": ""
+    },
+    {
+      "key": "next_url",
+      "value": ""
+    },
+    {
+      "key": "notifications",
+      "value": ""
+    },
+    {
+      "key": "scout_id",
+      "value": ""
+    },
+    {
+      "key": "scout_tagLine",
+      "value": ""
+    },
+    {
+      "key": "scout_description",
+      "value": ""
+    },
+    {
+      "key": "scout_yearEstablished",
+      "value": ""
+    },
+    {
+      "key": "scout_affiliation",
+      "value": ""
+    },
+    {
+      "key": "kora_login_email",
+      "value": ""
+    },
+    {
+      "key": "kora_login_password",
+      "value": ""
+    },
+    {
+      "key": "edit_comment_id",
+      "value": ""
+    },
+    {
+      "key": "kora_login_scout_email",
+      "value": ""
+    },
+    {
+      "key": "kora_login_scout_password",
+      "value": ""
+    },
+    {
+      "key": "chat",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "player_user_id",
+      "value": ""
+    }
+  ]
+}
