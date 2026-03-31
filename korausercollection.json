@@ -835,7 +835,7 @@
               "key": "media_file",
               "type": "file",
               "uuid": "b0a5a7ff-ca1c-42e2-bf2a-5547b4a7de50",
-              "src": "Test Images/footbll.jpg"
+              "src": "/C:/Users/INX/OneDrive/Documents/KoraDreamNewMan/Test Images/footbll.jpg"
             },
             {
               "key": "access",
@@ -958,7 +958,7 @@
               "key": "media_file",
               "type": "file",
               "uuid": "958d8dea-f290-46cf-a339-8d150742ea7f",
-              "src": "Test Images/test.jpg"
+              "src": "/C:/Users/INX/OneDrive/Documents/KoraDreamNewMan/Test Images/test.jpg"
             }
           ]
         },
